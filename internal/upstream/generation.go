@@ -12,6 +12,7 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
 	"mcpctl/internal/config"
+	"mcpctl/internal/rotate"
 	"mcpctl/internal/source"
 )
 
@@ -181,7 +182,7 @@ func (g *generation) dial() (*mcp.ClientSession, error) {
 			return nil, err
 		}
 	}
-	lf, err := openRotating(filepath.Join(logDir, g.h.name+".log"), logMaxSize)
+	lf, err := rotate.Open(filepath.Join(logDir, g.h.name+".log"), rotate.DefaultMaxSize)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +191,7 @@ func (g *generation) dial() (*mcp.ClientSession, error) {
 		lf.Close()
 		return nil, err
 	}
-	go pumpStderr(pr, lf)
+	go rotate.Pump(pr, lf)
 	closePW := sync.OnceFunc(func() { pw.Close() })
 	defer closePW()
 	cmd.Stderr = pw

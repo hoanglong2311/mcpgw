@@ -24,7 +24,9 @@ func main() {
 	}
 
 	server := mcp.NewServer(&mcp.Implementation{Name: "fakeserver", Version: "0.0.1"}, &mcp.ServerOptions{
-		Instructions: "fake upstream instructions",
+		Instructions:       "fake upstream instructions",
+		SubscribeHandler:   func(context.Context, *mcp.SubscribeRequest) error { return nil },
+		UnsubscribeHandler: func(context.Context, *mcp.UnsubscribeRequest) error { return nil },
 		CompletionHandler: func(_ context.Context, req *mcp.CompleteRequest) (*mcp.CompleteResult, error) {
 			var values []string
 			if req.Params.Ref != nil && req.Params.Ref.Type == "ref/prompt" && req.Params.Ref.Name == "greet" {
@@ -86,6 +88,17 @@ func addTools(server *mcp.Server) {
 				}
 			}
 			return textResult("progressed"), nil, nil
+		})
+
+	type touchArgs struct {
+		URI string `json:"uri"`
+	}
+	mcp.AddTool(server, &mcp.Tool{Name: "touch", Description: "notify that a resource was updated"},
+		func(ctx context.Context, _ *mcp.CallToolRequest, a touchArgs) (*mcp.CallToolResult, any, error) {
+			if err := server.ResourceUpdated(ctx, &mcp.ResourceUpdatedNotificationParams{URI: a.URI}); err != nil {
+				return nil, nil, err
+			}
+			return textResult("touched " + a.URI), nil, nil
 		})
 
 	type addArgs struct {

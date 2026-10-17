@@ -1,4 +1,4 @@
-package upstream
+package rotate
 
 import (
 	"io"
@@ -6,9 +6,9 @@ import (
 	"sync"
 )
 
-const logMaxSize = 5 << 20
+const DefaultMaxSize = 5 << 20
 
-type rotatingFile struct {
+type File struct {
 	path string
 	max  int64
 
@@ -17,15 +17,15 @@ type rotatingFile struct {
 	size int64
 }
 
-func openRotating(path string, max int64) (*rotatingFile, error) {
-	r := &rotatingFile{path: path, max: max}
+func Open(path string, max int64) (*File, error) {
+	r := &File{path: path, max: max}
 	if err := r.open(); err != nil {
 		return nil, err
 	}
 	return r, nil
 }
 
-func (r *rotatingFile) open() error {
+func (r *File) open() error {
 	f, err := os.OpenFile(r.path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func (r *rotatingFile) open() error {
 	return nil
 }
 
-func (r *rotatingFile) Write(p []byte) (int, error) {
+func (r *File) Write(p []byte) (int, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.size > 0 && r.size+int64(len(p)) > r.max {
@@ -56,13 +56,13 @@ func (r *rotatingFile) Write(p []byte) (int, error) {
 	return n, err
 }
 
-func (r *rotatingFile) Close() error {
+func (r *File) Close() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	return r.f.Close()
 }
 
-func pumpStderr(pr *os.File, dst *rotatingFile) {
+func Pump(pr *os.File, dst io.WriteCloser) {
 	io.Copy(dst, pr)
 	pr.Close()
 	dst.Close()
