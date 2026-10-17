@@ -5,13 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"strings"
 	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-const progressTokenKey = "progressToken"
+const (
+	progressTokenKey   = "progressToken"
+	reservedMetaPrefix = "io.modelcontextprotocol/"
+)
 
 const progressGrace = 500 * time.Millisecond
 
@@ -107,7 +111,11 @@ func forwardMeta(in mcp.Meta) mcp.Meta {
 		return nil
 	}
 	out := maps.Clone(in)
-	delete(out, progressTokenKey)
+	for k := range out {
+		if k == progressTokenKey || strings.HasPrefix(k, reservedMetaPrefix) {
+			delete(out, k)
+		}
+	}
 	if len(out) == 0 {
 		return nil
 	}
