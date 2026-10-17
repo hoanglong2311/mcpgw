@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "atlassian": {
+      "command": "/opt/mcpctl/bin/mcpctl",
+      "args": [
+        "connect",
+        "atlassian"
+      ]
+    },
+    "gitlab": {
+      "command": "/opt/mcpctl/bin/mcpctl",
+      "args": [
+        "connect",
+        "gitlab"
+      ]
+    }
+  }
+}

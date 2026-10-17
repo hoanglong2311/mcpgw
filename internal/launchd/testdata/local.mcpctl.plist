@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>local.mcpctl</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/mcpctl/bin/mcpctl</string>
+		<string>serve</string>
+		<string>--config</string>
+		<string>/tmp/a&amp;b/config.toml</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>/Users/x</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/Users/x/.local/state/mcpctl/logs/launchd.out</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/x/.local/state/mcpctl/logs/launchd.err</string>
+	<key>ProcessType</key>
+	<string>Standard</string>
+</dict>
+</plist>

@@ -1,0 +1,2 @@
+claude mcp add --transport http --scope user atlassian http://127.0.0.1:8765/s/atlassian
+claude mcp add --transport http --scope user gitlab http://127.0.0.1:8765/s/gitlab

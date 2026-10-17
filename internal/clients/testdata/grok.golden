@@ -1,0 +1,8 @@
+[mcp_servers.atlassian]
+url = "http://127.0.0.1:8765/s/atlassian"
+
+[mcp_servers.gitlab]
+url = "http://127.0.0.1:8765/s/gitlab"
+
+[compat.claude]
+mcps = false
