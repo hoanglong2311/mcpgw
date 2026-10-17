@@ -206,6 +206,13 @@ func TestServe(t *testing.T) {
 	if h.serveOpts == nil || h.serveOpts.ConfigPath != h.configPath || h.serveOpts.StateDir != h.stateDir || h.serveOpts.Version != "1.2.3" {
 		t.Fatalf("serve opts = %+v", h.serveOpts)
 	}
+	if h.serveOpts.Logger != nil {
+		t.Fatal("default serve must pass a nil logger so the daemon uses daemon.log")
+	}
+	h.wantExit(0, "serve", "--log-stderr")
+	if h.serveOpts.Logger == nil {
+		t.Fatal("--log-stderr must pass a logger")
+	}
 	h.env.Serve = func(context.Context, ServeOptions) error { return errors.New("bind failed") }
 	h.wantExit(1, "serve")
 	if !strings.Contains(h.errb.String(), "bind failed") {

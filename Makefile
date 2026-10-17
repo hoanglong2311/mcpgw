@@ -1,7 +1,14 @@
-.PHONY: build test vet fmt-check lint
+.PHONY: all build tray test vet fmt-check lint
+
+VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+
+all: build tray
 
 build:
-	go build -o bin/mcpctl ./cmd/mcpctl
+	go build -ldflags "-X main.Version=$(VERSION)" -o bin/mcpctl ./cmd/mcpctl
+
+tray:
+	go build -o bin/mcpctl-tray ./cmd/mcpctl-tray
 
 test:
 	go test -race ./...

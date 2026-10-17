@@ -58,6 +58,7 @@ func (a *app) version(_ context.Context, args []string) error {
 
 func (a *app) serve(ctx context.Context, args []string) error {
 	fs := a.flags("serve")
+	logStderr := fs.Bool("log-stderr", false, "log to stderr instead of the rotating daemon.log")
 	pos, err := parse(fs, args)
 	if err != nil {
 		return err
@@ -67,12 +68,11 @@ func (a *app) serve(ctx context.Context, args []string) error {
 	}
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	return a.env.Serve(ctx, ServeOptions{
-		ConfigPath: a.configPath,
-		StateDir:   a.stateDir,
-		Version:    a.env.Version,
-		Logger:     slog.New(slog.NewTextHandler(a.env.Stderr, nil)),
-	})
+	opts := ServeOptions{ConfigPath: a.configPath, StateDir: a.stateDir, Version: a.env.Version}
+	if *logStderr {
+		opts.Logger = slog.New(slog.NewTextHandler(a.env.Stderr, nil))
+	}
+	return a.env.Serve(ctx, opts)
 }
 
 func (a *app) offlineStatus() (*control.Status, error) {

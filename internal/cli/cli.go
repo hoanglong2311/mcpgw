@@ -16,7 +16,7 @@ import (
 const usageText = `usage: mcpctl [--config PATH] [--state-dir DIR] <command> [args]
 
 commands:
-  serve                       run the gateway daemon in the foreground
+  serve [--log-stderr]        run the gateway daemon in the foreground (logs to <state>/logs/daemon.log unless --log-stderr)
   list [--json]               list configured servers and their state
   status [--json]             show daemon status (exit 1 if the daemon is not running)
   enable <name>               enable a server
