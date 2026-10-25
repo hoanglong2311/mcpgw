@@ -18,10 +18,10 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"mcpctl/internal/clients"
-	"mcpctl/internal/config"
-	"mcpctl/internal/control"
-	"mcpctl/internal/launchd"
+	"github.com/hoanglong2311/mcpgw/internal/clients"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/launchd"
 )
 
 func clientNames() string { return strings.Join(clients.Names(), ", ") }

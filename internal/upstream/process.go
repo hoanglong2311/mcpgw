@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	"mcpctl/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/config"
 )
 
 var envAllowlist = []string{"PATH", "HOME", "USER", "LOGNAME", "LANG", "LC_ALL", "TMPDIR", "SHELL"}

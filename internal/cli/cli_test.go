@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"mcpctl/internal/config"
-	"mcpctl/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/control"
 )
 
 type fakeControl struct {

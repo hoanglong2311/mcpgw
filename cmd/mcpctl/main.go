@@ -5,12 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"mcpctl/internal/bridge"
-	"mcpctl/internal/cli"
-	"mcpctl/internal/control"
-	"mcpctl/internal/daemon"
-	"mcpctl/internal/launchd"
-	"mcpctl/internal/secrets"
+	"github.com/hoanglong2311/mcpgw/internal/bridge"
+	"github.com/hoanglong2311/mcpgw/internal/cli"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/daemon"
+	"github.com/hoanglong2311/mcpgw/internal/launchd"
+	"github.com/hoanglong2311/mcpgw/internal/secrets"
 )
 
 var Version = "dev"

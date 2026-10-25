@@ -8,9 +8,9 @@ import (
 	"io"
 	"log/slog"
 
-	"mcpctl/internal/config"
-	"mcpctl/internal/control"
-	"mcpctl/internal/launchd"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/launchd"
 )
 
 const usageText = `usage: mcpctl [--config PATH] [--state-dir DIR] <command> [args]

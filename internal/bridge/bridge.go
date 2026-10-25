@@ -9,8 +9,8 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"mcpctl/internal/mirror"
-	"mcpctl/internal/source"
+	"github.com/hoanglong2311/mcpgw/internal/mirror"
+	"github.com/hoanglong2311/mcpgw/internal/source"
 )
 
 const legacyProtocolVersion = "2025-11-25"

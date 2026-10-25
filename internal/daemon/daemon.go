@@ -12,12 +12,12 @@ import (
 	"sync"
 	"time"
 
-	"mcpctl/internal/config"
-	"mcpctl/internal/control"
-	"mcpctl/internal/gateway"
-	"mcpctl/internal/mirror"
-	"mcpctl/internal/source"
-	"mcpctl/internal/upstream"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/gateway"
+	"github.com/hoanglong2311/mcpgw/internal/mirror"
+	"github.com/hoanglong2311/mcpgw/internal/source"
+	"github.com/hoanglong2311/mcpgw/internal/upstream"
 )
 
 type entry struct {

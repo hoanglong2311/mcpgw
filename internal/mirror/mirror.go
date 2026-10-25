@@ -13,7 +13,7 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"mcpctl/internal/source"
+	"github.com/hoanglong2311/mcpgw/internal/source"
 )
 
 const codeUnavailable = -32001

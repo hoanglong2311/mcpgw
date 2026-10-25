@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"mcpctl/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/control"
 )
 
 var now = time.Date(2026, 10, 17, 12, 0, 0, 0, time.UTC)

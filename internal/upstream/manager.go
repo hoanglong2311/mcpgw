@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"mcpctl/internal/config"
-	"mcpctl/internal/source"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/source"
 )
 
 type Options struct {

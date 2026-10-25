@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"mcpctl/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/control"
 )
 
 type Action int

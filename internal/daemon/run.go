@@ -11,12 +11,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"mcpctl/internal/config"
-	"mcpctl/internal/control"
-	"mcpctl/internal/gateway"
-	"mcpctl/internal/rotate"
-	"mcpctl/internal/secrets"
-	"mcpctl/internal/upstream"
+	"github.com/hoanglong2311/mcpgw/internal/config"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/gateway"
+	"github.com/hoanglong2311/mcpgw/internal/rotate"
+	"github.com/hoanglong2311/mcpgw/internal/secrets"
+	"github.com/hoanglong2311/mcpgw/internal/upstream"
 )
 
 const (

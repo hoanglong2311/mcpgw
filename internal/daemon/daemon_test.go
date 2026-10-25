@@ -12,7 +12,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"mcpctl/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/control"
 )
 
 func TestSharedChildAcrossClients(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"mcpctl/internal/source"
+	"github.com/hoanglong2311/mcpgw/internal/source"
 )
 
 var ErrAlreadyRunning = errors.New("another mcpctl daemon is already listening on the control socket")

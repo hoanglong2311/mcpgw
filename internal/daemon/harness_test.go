@@ -18,8 +18,8 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"mcpctl/internal/control"
-	"mcpctl/internal/testutil"
+	"github.com/hoanglong2311/mcpgw/internal/control"
+	"github.com/hoanglong2311/mcpgw/internal/testutil"
 )
 
 type serverSpec struct {

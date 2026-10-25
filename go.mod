@@ -1,4 +1,4 @@
-module mcpctl
+module github.com/hoanglong2311/mcpgw
 
 go 1.27.1
 
