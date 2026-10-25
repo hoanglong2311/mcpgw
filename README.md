@@ -34,10 +34,11 @@ cp -R mcpctl-tray.app ~/Applications/
 ### Cách 2 — `go install`
 
 ```sh
-go install github.com/hoanglong2311/mcpgw/cmd/mcpctl@latest   # vào $(go env GOPATH)/bin, thường là ~/go/bin
+go install github.com/hoanglong2311/mcpgw/cmd/mcpctl@latest        # vào $(go env GOPATH)/bin, thường là ~/go/bin
+go install github.com/hoanglong2311/mcpgw/cmd/mcpctl-tray@latest   # menu bar, tuỳ chọn
 ```
 
-Cách này chỉ cài binary `mcpctl`, không có app tray và không có file config mẫu (lấy config ở bước Setup). Nếu `mcpctl` báo `command not found`, thêm `export PATH="$HOME/go/bin:$PATH"` vào `~/.zshrc`.
+Cách này chỉ ra binary, không có file config mẫu (lấy config ở bước Setup). `mcpctl-tray` cài theo cách này là binary trần, không có `.app`, nên không dùng được **Start at login**. Muốn có mục đó thì lấy `mcpctl-tray.app` từ bản release (Cách 1). Nếu `mcpctl` báo `command not found`, thêm `export PATH="$HOME/go/bin:$PATH"` vào `~/.zshrc`.
 
 ### Cách 3 — build từ source
 
@@ -158,7 +159,25 @@ Claude Desktop chỉ chạy được MCP stdio, nên `mcpctl connect <name>` là
 
 Sau khi mọi client đã chạy ổn qua gateway: xoá token inline còn sót trong file config cũ của client, và xoá các file `.bak` có chứa token.
 
-**5. Menu bar (tuỳ chọn).** Mở `~/Applications/mcpctl-tray.app`. Từ menu có thể bật/tắt/restart từng server, Copy URL, Reload config, mở config/log, Start gateway và Start at login.
+**5. Menu bar app `mcpctl-tray` (tuỳ chọn, nên dùng).** Đây là icon trên menu bar để xem và điều khiển gateway, khỏi phải mở terminal. Tray chỉ là giao diện, nói chuyện với daemon qua control socket. Tắt tray thì gateway **vẫn chạy**.
+
+```sh
+open ~/Applications/mcpctl-tray.app      # cài theo Cách 1 hoặc make install-app
+~/go/bin/mcpctl-tray &                   # cài theo Cách 2 (go install)
+```
+
+Bật **Start at login** ngay trong menu để lần sau tự mở (cần bản `.app`, macOS 13+). Nếu macOS báo app "is damaged" thì chạy `xattr -dr com.apple.quarantine ~/Applications/mcpctl-tray.app`.
+
+| Mục trong menu | Tác dụng |
+|---|---|
+| `Gateway: running on 127.0.0.1:8765` | Trạng thái daemon. Nếu là `stopped`/`unreachable` thì có thêm mục **Start gateway** (cần đã chạy `mcpctl daemon install`) |
+| `✓ <server> — ready pid … · N sessions` | Mỗi dòng một server. Dấu ✓ là đang bật, bấm vào để bật/tắt (giống `mcpctl enable/disable`). `idle` là chưa có client nào nối vào, process sẽ được khởi động khi có client đầu tiên. Nếu server lỗi, lỗi hiện ngay bên dưới, kèm thời gian retry |
+| **Restart ›** | Restart một server, ví dụ sau khi đổi secret |
+| **Copy URL ›** | Copy `http://127.0.0.1:8765/s/<name>` để dán vào config client |
+| **Reload config** | Đọc lại `config.toml` sau khi sửa (giống `mcpctl reload`) |
+| **Open config** / **Open logs folder** | Mở `~/.config/mcpctl/config.toml` / `~/.local/state/mcpctl/logs` |
+| **Start at login** | Tự mở tray khi đăng nhập macOS |
+| **Quit tray** | Chỉ tắt icon, **không** tắt gateway. Muốn tắt hẳn gateway thì chạy `mcpctl daemon uninstall` |
 
 ## Dùng hằng ngày
 
