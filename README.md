@@ -78,24 +78,81 @@ mcpctl daemon install     # tạo ~/Library/LaunchAgents/local.mcpctl.plist và 
 mcpctl status             # mọi server phải ở ready hoặc idle, cột ERROR là "-"
 ```
 
-**4. Nối client.** In snippet cho từng client rồi dán vào config của client đó:
+**4. Nối client.** Mỗi server có một URL `http://127.0.0.1:8765/s/<name>`. Lấy danh sách tên server bằng `mcpctl list`. Client nào cũng làm theo 5 bước:
+
+1. Backup file config của client.
+2. Nếu client đã khai báo server cùng tên theo kiểu stdio cũ (`npx`/`uvx` + token inline) thì **xoá entry đó trước**.
+3. Thêm entry HTTP trỏ về gateway.
+4. Kiểm tra lại bằng lệnh `list` của client.
+5. Mở **phiên mới**. Phiên đang mở vẫn giữ process cũ.
+
+`mcpctl clients <client>` in sẵn snippet đúng định dạng của từng client, dùng tên và URL lấy từ config của mình.
+
+#### Claude Code
 
 ```sh
-mcpctl clients               # snippet cho mọi client
-mcpctl clients claude-code   # in lệnh `claude mcp add --transport http ...`
-mcpctl clients codex         # block [mcp_servers.*] cho ~/.codex/config.toml
+cp -p ~/.claude.json ~/.claude.json.bak
+
+claude mcp remove gitlab -s user                  # chỉ khi đã có bản stdio cũ cùng tên
+claude mcp add --transport http --scope user gitlab http://127.0.0.1:8765/s/gitlab
+
+claude mcp list                                   # gitlab: http://127.0.0.1:8765/s/gitlab (HTTP) - ✔ Connected
 ```
 
-| Client | Nơi dán |
-|---|---|
-| `claude-code` | chạy các lệnh in ra trong shell |
-| `codex` | `~/.codex/config.toml` |
-| `orca` | Orca MCP settings (TOML) |
-| `grok` | `~/.grok/config.toml` |
-| `hermes` | `~/.hermes/config.yaml` |
-| `claude-desktop` | `~/Library/Application Support/Claude/claude_desktop_config.json` (dùng bridge stdio `mcpctl connect <name>`) |
+Thêm tất cả server một lần (sau khi đã xoá các entry trùng tên): `mcpctl clients claude-code | sh`.
 
-Nếu client đang khai báo cùng server theo kiểu stdio (có token inline), xoá entry cũ đi rồi mới thêm entry mới. Nhớ backup file config trước. Phiên agent đang mở vẫn giữ process cũ, chỉ phiên mở sau mới đi qua gateway.
+#### Codex CLI
+
+```sh
+cp -p ~/.codex/config.toml ~/.codex/config.toml.bak
+
+codex mcp remove gitlab                           # chỉ khi đã có bản stdio cũ cùng tên
+codex mcp add gitlab --url http://127.0.0.1:8765/s/gitlab
+
+codex mcp list
+```
+
+Hoặc dán output của `mcpctl clients codex` vào `~/.codex/config.toml`.
+
+#### Grok CLI
+
+```sh
+cp -p ~/.grok/config.toml ~/.grok/config.toml.bak
+
+grok mcp remove gitlab                            # chỉ khi đã có bản stdio cũ cùng tên
+grok mcp add --scope user gitlab http://127.0.0.1:8765/s/gitlab
+
+grok mcp list
+```
+
+Grok tự đọc thêm MCP server từ config của Claude Code. Để không bị trùng server, thêm đoạn sau vào `~/.grok/config.toml`:
+
+```toml
+[compat.claude]
+mcps = false
+```
+
+Chạy `grok inspect` trong một repo để xem Grok đang nạp server từ nguồn nào. Output của `mcpctl clients grok` có sẵn cả hai phần trên.
+
+#### Hermes
+
+```sh
+hermes mcp remove gitlab                          # chỉ khi đã có bản cũ cùng tên
+hermes mcp add gitlab --url http://127.0.0.1:8765/s/gitlab
+hermes mcp test gitlab
+```
+
+Hoặc dán output của `mcpctl clients hermes` vào `~/.hermes/config.yaml`.
+
+#### Orca
+
+Dán output của `mcpctl clients orca` (TOML `[mcp_servers.*]`) vào phần MCP settings của Orca.
+
+#### Claude Desktop
+
+Claude Desktop chỉ chạy được MCP stdio, nên `mcpctl connect <name>` làm cầu nối stdio sang gateway. Dán output của `mcpctl clients claude-desktop` vào `mcpServers` trong `~/Library/Application Support/Claude/claude_desktop_config.json`, rồi tắt hẳn Claude Desktop và mở lại.
+
+Sau khi mọi client đã chạy ổn qua gateway: xoá token inline còn sót trong file config cũ của client, và xoá các file `.bak` có chứa token.
 
 **5. Menu bar (tuỳ chọn).** Mở `~/Applications/mcpctl-tray.app`. Từ menu có thể bật/tắt/restart từng server, Copy URL, Reload config, mở config/log, Start gateway và Start at login.
 
