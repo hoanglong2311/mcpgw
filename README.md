@@ -34,8 +34,10 @@ cp -R mcpctl-tray.app ~/Applications/
 ### Cách 2 — `go install`
 
 ```sh
-go install github.com/hoanglong2311/mcpgw/cmd/mcpctl@latest   # vào $(go env GOPATH)/bin
+go install github.com/hoanglong2311/mcpgw/cmd/mcpctl@latest   # vào $(go env GOPATH)/bin, thường là ~/go/bin
 ```
+
+Cách này chỉ cài binary `mcpctl`, không có app tray và không có file config mẫu (lấy config ở bước Setup). Nếu `mcpctl` báo `command not found`, thêm `export PATH="$HOME/go/bin:$PATH"` vào `~/.zshrc`.
 
 ### Cách 3 — build từ source
 
@@ -49,13 +51,15 @@ Thêm `~/.local/bin` vào `PATH` nếu chưa có. Đặt binary ở chỗ cố �
 
 ## Setup
 
-**1. Config.** Copy file mẫu rồi sửa lại: URL, username, chỉ giữ server mình dùng.
+**1. Config.** Tải file mẫu về, rồi sửa lại: URL, username, chỉ giữ server mình dùng. Cách này dùng được với cả ba cách cài ở trên.
 
 ```sh
 mkdir -p ~/.config/mcpctl
-cp config.example.toml ~/.config/mcpctl/config.toml
+curl -fsSL https://raw.githubusercontent.com/hoanglong2311/mcpgw/main/config.example.toml -o ~/.config/mcpctl/config.toml
 chmod 600 ~/.config/mcpctl/config.toml
 ```
+
+Nếu team của bạn có sẵn repo config dùng chung thì lấy file từ repo đó thay cho file mẫu.
 
 - Tên server: `[a-z0-9-]`, tối đa 32 ký tự. Tên này là path trong URL `/s/<name>`.
 - `command` nên ghi đường dẫn tuyệt đối. Mac Intel dùng `/usr/local/bin/...` thay cho `/opt/homebrew/bin/...`.
