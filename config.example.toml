@@ -1,0 +1,42 @@
+# mcpctl config — copy to ~/.config/mcpctl/config.toml and chmod 600.
+# Never put tokens or passwords here: reference them through keychain_env
+# and store them with `mcpctl secret set <service/account>`.
+#
+# command: absolute path is safest (the daemon runs under launchd with
+# PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin).
+# Intel Macs: replace /opt/homebrew/bin with /usr/local/bin.
+
+[gateway]
+listen = "127.0.0.1:8765"        # loopback only
+# call_timeout = "120s"
+# connect_timeout = "60s"
+# session_idle_timeout = "30m"
+
+# Jira + Confluence (Server/Data Center, personal access tokens)
+[servers.atlassian]
+command = "/opt/homebrew/bin/uvx"
+args = ["mcp-atlassian"]
+env = { JIRA_URL = "https://jira.example.com", JIRA_USERNAME = "your.name", CONFLUENCE_URL = "https://confluence.example.com", CONFLUENCE_USERNAME = "your.name" }
+keychain_env = { JIRA_PERSONAL_TOKEN = "mcpctl/jira-pat", CONFLUENCE_API_TOKEN = "mcpctl/confluence-token" }
+
+# GitLab
+[servers.gitlab]
+command = "/opt/homebrew/bin/npx"
+args = ["-y", "@zereight/mcp-gitlab"]
+env = { GITLAB_API_URL = "https://gitlab.example.com/api/v4" }
+keychain_env = { GITLAB_PERSONAL_ACCESS_TOKEN = "mcpctl/gitlab-pat" }
+
+# MongoDB — the whole connection string lives in the Keychain.
+# Keep --readOnly for anything production.
+[servers.mongo-example]
+command = "/opt/homebrew/bin/npx"
+args = ["-y", "mongodb-mcp-server@latest", "--readOnly"]
+keychain_env = { MDB_MCP_CONNECTION_STRING = "mcpctl/mongo-example" }
+
+# MySQL
+[servers.mysql-example]
+command = "/opt/homebrew/bin/npx"
+args = ["-y", "@benborla29/mcp-server-mysql@2.0.9"]
+env = { MYSQL_HOST = "db.example.com", MYSQL_PORT = "3306", MYSQL_USER = "your.name", MYSQL_DB = "example" }
+keychain_env = { MYSQL_PASS = "mcpctl/mysql-example" }
+enabled = false                  # start disabled; `mcpctl enable mysql-example`
