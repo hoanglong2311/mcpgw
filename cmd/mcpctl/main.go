@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 
 	"github.com/hoanglong2311/mcpgw/internal/bridge"
 	"github.com/hoanglong2311/mcpgw/internal/cli"
@@ -21,7 +22,7 @@ func main() {
 		Stdin:   os.Stdin,
 		Stdout:  os.Stdout,
 		Stderr:  os.Stderr,
-		Version: Version,
+		Version: version(),
 		Home:    home,
 		UID:     os.Getuid(),
 		NewControl: func(socketPath string) cli.Control {
@@ -37,6 +38,16 @@ func main() {
 		Executable: executable,
 	}
 	os.Exit(cli.Run(context.Background(), env, os.Args[1:]))
+}
+
+func version() string {
+	if Version != "dev" {
+		return Version
+	}
+	if bi, ok := debug.ReadBuildInfo(); ok && bi.Main.Version != "" && bi.Main.Version != "(devel)" {
+		return bi.Main.Version
+	}
+	return Version
 }
 
 func executable() (string, error) {
